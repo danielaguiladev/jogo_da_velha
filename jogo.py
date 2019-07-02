@@ -1,243 +1,189 @@
-from time import sleep
-from random import randint
-import sys
-import os
+from math import inf as infinity
+from random import choice
+import platform
+import time
+from os import system
 
-pts_jogador = 0
-pts_pc = 0
+HUMAN = -1
+COMP = +1
+board = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+]
 
-def clearConsole():
-    os.system('cls' if os.name == 'nt' else 'clear')
-
-while True:
-    clearConsole()
-    j = ''
-    primeiro = ''
-    p1, p2, p3, p4, p5, p6, p7, p8, p9 = ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '
-    lv = 'livre'
-    pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9 = lv, lv, lv, lv, lv, lv, lv, lv, lv
-    jogada = 0
-    jog_adv = 0
-    jogada_aleatoria = 0
-    turnos = 1
-    vencedor = ''
-
-    tabuleiro_inicial = '''
-
-Tabuleiro:
-
-     |     |     
-  1  |  2  |  3  
-_____|_____|_____
-     |     |     
-  4  |  5  |  6  
-_____|_____|_____
-     |     |     
-  7  |  8  |  9  
-     |     |     
-    '''
-
-    print(tabuleiro_inicial)
-    j = 'O'
-    adv = 'X'
-    primeiro = 'EU'
-
-    def atualizar_tabuleiro():
-        clearConsole()
-        global p1, p2, p3, p4, p5, p6, p7, p8, p9
-        tabuleiro = '''
-     |     |   
-  {}  |  {}  |  {}
-_____|_____|_____
-     |     |
-  {}  |  {}  |  {}
-_____|_____|_____
-     |     |
-  {}  |  {}  |  {}
-     |     |
-        '''.format(p1, p2, p3, p4, p5, p6, p7, p8, p9)
-        print(tabuleiro)
-
-    def jogada_j1():
-        global jogada
-
-        while True:
-            try:
-                jogada = int(input('Digite a posicao da sua jogada (1 a 9) e pressione Enter: '))
-                break
-            except ValueError:
-                print('\nValor digitado invalido. Digite um número inteiro de 1 a 9!\n')
-
-    def rotina_j1():
-        global jogada
-        global pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9
-
-        msg_ocupado = '\nEste espaço ja esta ocupado!\n'
-
-        jogada_j1()
-
-        while jogada not in range(1, (9 + 1)):
-            jogada_j1()
-
-            if jogada not in range(1, (9 + 1)):
-                print('\nNumero invalido!\n')
-
-        while jogada == 1 and pos1 == 'ocupada' or \
-            jogada == 2 and pos2 == 'ocupada' or \
-            jogada == 3 and pos3 == 'ocupada' or \
-            jogada == 4 and pos4 == 'ocupada' or \
-            jogada == 5 and pos5 == 'ocupada' or \
-            jogada == 6 and pos6 == 'ocupada' or \
-            jogada == 7 and pos7 == 'ocupada' or \
-            jogada == 8 and pos8 == 'ocupada' or \
-                jogada == 9 and pos9 == 'ocupada':
-            print(msg_ocupado)
-            rotina_j1()
-
-    def atualizar_jogadas_j1():
-        global jogada
-        global p1, p2, p3, p4, p5, p6, p7, p8, p9
-        global pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9
-
-        if jogada == 1:
-            p1 = j
-            pos1 = 'ocupada'
-        elif jogada == 2:
-            p2 = j
-            pos2 = 'ocupada'
-        elif jogada == 3:
-            p3 = j
-            pos3 = 'ocupada'
-        elif jogada == 4:
-            p4 = j
-            pos4 = 'ocupada'
-        elif jogada == 5:
-            p5 = j
-            pos5 = 'ocupada'
-        elif jogada == 6:
-            p6 = j
-            pos6 = 'ocupada'
-        elif jogada == 7:
-            p7 = j
-            pos7 = 'ocupada'
-        elif jogada == 8:
-            p8 = j
-            pos8 = 'ocupada'
-        elif jogada == 9:
-            p9 = j
-            pos9 = 'ocupada'
-
-    def atualizar_jogadas_j2():
-        global jogada, jogada_aleatoria, adv
-        global p1, p2, p3, p4, p5, p6, p7, p8, p9
-        global pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9
-        jogada_aleatoria = randint(1, 9)
-
-        while jogada_aleatoria == 1 and pos1 == 'ocupada' or \
-            jogada_aleatoria == 2 and pos2 == 'ocupada' or \
-            jogada_aleatoria == 3 and pos3 == 'ocupada' or \
-            jogada_aleatoria == 4 and pos4 == 'ocupada' or \
-            jogada_aleatoria == 5 and pos5 == 'ocupada' or \
-            jogada_aleatoria == 6 and pos6 == 'ocupada' or \
-            jogada_aleatoria == 7 and pos7 == 'ocupada' or \
-            jogada_aleatoria == 8 and pos8 == 'ocupada' or \
-                jogada_aleatoria == 9 and pos9 == 'ocupada':
-            jogada_aleatoria = randint(1, 9)
-
-        if jogada_aleatoria == 1:
-            p1 = adv
-            pos1 = 'ocupada'
-        elif jogada_aleatoria == 2:
-            p2 = adv
-            pos2 = 'ocupada'
-        elif jogada_aleatoria == 3:
-            p3 = adv
-            pos3 = 'ocupada'
-        elif jogada_aleatoria == 4:
-            p4 = adv
-            pos4 = 'ocupada'
-        elif jogada_aleatoria == 5:
-            p5 = adv
-            pos5 = 'ocupada'
-        elif jogada_aleatoria == 6:
-            p6 = adv
-            pos6 = 'ocupada'
-        elif jogada_aleatoria == 7:
-            p7 = adv
-            pos7 = 'ocupada'
-        elif jogada_aleatoria == 8:
-            p8 = adv
-            pos8 = 'ocupada'
-        elif jogada_aleatoria == 9:
-            p9 = adv
-            pos9 = 'ocupada'
-
-    def checar_vencedor():
-        global j, adv, turnos, vencedor, pts_jogador, pts_pc
-        global p1, p2, p3, p4, p5, p6, p7, p8, p9
-
-        if p1 == j and p2 == j and p3 == j or \
-           p1 == j and p4 == j and p7 == j or \
-           p1 == j and p5 == j and p9 == j or \
-           p2 == j and p5 == j and p8 == j or \
-           p3 == j and p5 == j and p7 == j or \
-           p3 == j and p6 == j and p9 == j or \
-           p4 == j and p5 == j and p6 == j or \
-           p7 == j and p8 == j and p9 == j:
-            print('VOCE GANHOU!\n')
-            pts_jogador += 1
-            vencedor = 'EU'
-            turnos = 10
-
-        if p1 == adv and p2 == adv and p3 == adv or \
-           p1 == adv and p4 == adv and p7 == adv or \
-           p1 == adv and p5 == adv and p9 == adv or \
-           p2 == adv and p5 == adv and p8 == adv or \
-           p3 == adv and p5 == adv and p7 == adv or \
-           p3 == adv and p6 == adv and p9 == adv or \
-           p4 == adv and p5 == adv and p6 == adv or \
-           p7 == adv and p8 == adv and p9 == adv:
-            print('EU GANHEI!\n')
-            pts_pc += 1
-            vencedor = 'PC'
-            turnos = 10
-
-    def atualizar_tudo():
-        global jogada
-        global turnos
-        global vencedor
-
-        rotina_j1()
-        atualizar_jogadas_j1()
-        atualizar_tabuleiro()
-        checar_vencedor()
-
-        if turnos == 5:
-            print('NOS EMPATAMOS!\n')
-            turnos = 10
-            vencedor = 'EMPATE'
-
-        if vencedor == '':
-            atualizar_jogadas_j2()
-            atualizar_tabuleiro()
-            checar_vencedor()
-        jogada = 0
-        turnos += 1
-
-    while turnos <= 5:
-        atualizar_tudo()
-
-    print('-------- PLACAR --------')
-    print('Voce: {} | Computador: {}'.format(pts_jogador, pts_pc))
-    print('------------------------')
-
-    while True:
-        reiniciar = input('\nQuer jogar de novo? Digite S para sim ou N para nao: ').lower()
-        if reiniciar in ('s', 'n', '"s"', '"n"'):
-            clearConsole()
-            break
-        print('\nResposta invalida!')
-    if reiniciar == 's' or reiniciar == '"s"':
-        continue
+def evaluate(state):
+    if wins(state, COMP):
+        score = +1
+    elif wins(state, HUMAN):
+        score = -1
     else:
-        sys.exit(0)
+        score = 0
+    return score
+
+def wins(state, player):
+    win_state = [
+        [state[0][0], state[0][1], state[0][2]],
+        [state[1][0], state[1][1], state[1][2]],
+        [state[2][0], state[2][1], state[2][2]],
+        [state[0][0], state[1][0], state[2][0]],
+        [state[0][1], state[1][1], state[2][1]],
+        [state[0][2], state[1][2], state[2][2]],
+        [state[0][0], state[1][1], state[2][2]],
+        [state[2][0], state[1][1], state[0][2]],
+    ]
+    if [player, player, player] in win_state:
+        return True
+    else:
+        return False
+
+
+def game_over(state):
+    return wins(state, HUMAN) or wins(state, COMP)
+
+def empty_cells(state):
+    cells = []
+    for x, row in enumerate(state):
+        for y, cell in enumerate(row):
+            if cell == 0:
+                cells.append([x, y])
+    return cells
+
+def valid_move(x, y):
+    if [x, y] in empty_cells(board):
+        return True
+    else:
+        return False
+
+def set_move(x, y, player):
+    if valid_move(x, y):
+        board[x][y] = player
+        return True
+    else:
+        return False
+
+def minimax(state, depth, player):
+    if player == COMP:
+        best = [-1, -1, -infinity]
+    else:
+        best = [-1, -1, +infinity]
+
+    if depth == 0 or game_over(state):
+        score = evaluate(state)
+        return [-1, -1, score]
+
+    for cell in empty_cells(state):
+        x, y = cell[0], cell[1]
+        state[x][y] = player
+        score = minimax(state, depth - 1, -player)
+        state[x][y] = 0
+        score[0], score[1] = x, y
+
+        if player == COMP:
+            if score[2] > best[2]:
+                best = score  # max value
+        else:
+            if score[2] < best[2]:
+                best = score  # min value
+    return best
+
+def clean():
+    os_name = platform.system().lower()
+    if 'windows' in os_name:
+        system('cls')
+    else:
+        system('clear')
+
+def render(state, c_choice, h_choice):
+    chars = {
+        -1: h_choice,
+        +1: c_choice,
+        0: ' '
+    }
+    str_line = '---------------'
+
+    print('\n' + str_line)
+    for row in state:
+        for cell in row:
+            symbol = chars[cell]
+            print(f'| {symbol} |', end='')
+        print('\n' + str_line)
+
+
+def ai_turn(c_choice, h_choice):
+    depth = len(empty_cells(board))
+    if depth == 0 or game_over(board):
+        return
+
+    clean()
+    print(f'Computer turn [{c_choice}]')
+    render(board, c_choice, h_choice)
+
+    if depth == 9:
+        x = choice([0, 1, 2])
+        y = choice([0, 1, 2])
+    else:
+        move = minimax(board, depth, COMP)
+        x, y = move[0], move[1]
+
+    set_move(x, y, COMP)
+    time.sleep(1)
+
+def human_turn(c_choice, h_choice):
+    depth = len(empty_cells(board))
+    if depth == 0 or game_over(board):
+        return
+    move = -1
+    moves = {
+        1: [0, 0], 2: [0, 1], 3: [0, 2],
+        4: [1, 0], 5: [1, 1], 6: [1, 2],
+        7: [2, 0], 8: [2, 1], 9: [2, 2],
+    }
+
+    clean()
+    print(f'Human turn [{h_choice}]')
+    render(board, c_choice, h_choice)
+
+    while move < 1 or move > 9:
+        try:
+            move = int(input('Use numpad (1..9): '))
+            coord = moves[move]
+            can_move = set_move(coord[0], coord[1], HUMAN)
+
+            if not can_move:
+                print('Bad move')
+                move = -1
+        except (EOFError, KeyboardInterrupt):
+            print('Bye')
+            exit()
+        except (KeyError, ValueError):
+            print('Bad choice')
+
+
+def main():
+    clean()
+    h_choice = 'X'
+    c_choice = 'O'
+    first = 'Y'
+    clean()
+    while len(empty_cells(board)) > 0 and not game_over(board):
+        human_turn(c_choice, h_choice)
+        ai_turn(c_choice, h_choice)
+    if wins(board, HUMAN):
+        clean()
+        print(f'Human turn [{h_choice}]')
+        render(board, c_choice, h_choice)
+        print('YOU WIN!')
+    elif wins(board, COMP):
+        clean()
+        print(f'Computer turn [{c_choice}]')
+        render(board, c_choice, h_choice)
+        print('YOU LOSE!')
+    else:
+        clean()
+        render(board, c_choice, h_choice)
+        print('DRAW!')
+    exit()
+
+if __name__ == '__main__':
+    main()
