@@ -81,10 +81,10 @@ def minimax(state, depth, player):
 
         if player == COMP:
             if score[2] > best[2]:
-                best = score  # max value
+                best = score
         else:
             if score[2] < best[2]:
-                best = score  # min value
+                best = score
     return best
 
 def clean():
@@ -116,7 +116,8 @@ def ai_turn(c_choice, h_choice):
         return
 
     clean()
-    print(f'Computer turn [{c_choice}]')
+    grupo()
+    print(f'Minha vez [{c_choice}]')
     render(board, c_choice, h_choice)
 
     if depth == 9:
@@ -141,27 +142,32 @@ def human_turn(c_choice, h_choice):
     }
 
     clean()
-    print(f'Human turn [{h_choice}]')
+    grupo()
+    print(f'Sua vez [{h_choice}]')
     render(board, c_choice, h_choice)
 
     while move < 1 or move > 9:
         try:
-            move = int(input('Use numpad (1..9): '))
+            move = int(input('Use os numeros entre (1..9): '))
             coord = moves[move]
             can_move = set_move(coord[0], coord[1], HUMAN)
 
             if not can_move:
-                print('Bad move')
+                print('Movimento errado')
                 move = -1
         except (EOFError, KeyboardInterrupt):
-            print('Bye')
+            print('Adios')
             exit()
         except (KeyError, ValueError):
-            print('Bad choice')
+            print('Escolha ruim')
+
+def grupo():
+    print('''
+Grupo: \n\tDaniel Aguila\n\tGabrielle Liberato\n\tSandro Caio
+''')
 
 
 def main():
-    clean()
     h_choice = 'X'
     c_choice = 'O'
     first = 'Y'
@@ -171,18 +177,21 @@ def main():
         ai_turn(c_choice, h_choice)
     if wins(board, HUMAN):
         clean()
-        print(f'Human turn [{h_choice}]')
+        grupo()
+        print(f'Sua vez [{h_choice}]')
         render(board, c_choice, h_choice)
-        print('YOU WIN!')
+        print('Você ganhou!')
     elif wins(board, COMP):
         clean()
-        print(f'Computer turn [{c_choice}]')
+        grupo()
+        print(f'Minha vez [{c_choice}]')
         render(board, c_choice, h_choice)
-        print('YOU LOSE!')
+        print('Você perdeu!')
     else:
         clean()
+        grupo()
         render(board, c_choice, h_choice)
-        print('DRAW!')
+        print('Empate!')
     exit()
 
 if __name__ == '__main__':
